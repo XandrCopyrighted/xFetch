@@ -1,4 +1,4 @@
-name: xCompile_main
+name: xFetch
 
 on:
   push:
@@ -20,10 +20,13 @@ jobs:
             override: true
             components: rust-src
 
+
+    - name: Clone Codeberg repository, move files to root
+      run: |
+        git clone https://codeberg.org/XDR/xFetch.git
+        mv xFetch/* .
     - name: Build
       run: RUSTFLAGS="-Zlocation-detail=none -Zthreads=8" cargo build --target x86_64-unknown-linux-gnu --profile optimized-build -Z build-std=std,panic_abort -Z build-std-features=panic_immediate_abort
-    #- name: Tests
-    #  run: cargo test --verbose
     - name: Check
       run: time ./target/x86_64-unknown-linux-gnu/optimized-build/xfetch
     - name: Artifact
